@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Expensis"
 include(":app")
- 
+include(":core")
