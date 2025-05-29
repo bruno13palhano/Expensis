@@ -22,10 +22,10 @@ fun AppNavigation(modifier: Modifier = Modifier) {
         entryDecorators = listOf(
             rememberSceneSetupNavEntryDecorator(),
             rememberSavedStateNavEntryDecorator(),
-            rememberViewModelStoreNavEntryDecorator()
+            rememberViewModelStoreNavEntryDecorator(),
         ),
         backStack = backStack,
-        onBack = { backStack.removeLastOrNull() }
+        onBack = { backStack.removeLastOrNull() },
     ) { key ->
         when (key) {
             Home -> NavEntry(key) {
