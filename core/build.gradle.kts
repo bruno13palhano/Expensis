@@ -35,6 +35,8 @@ android {
     }
 }
 
+tasks.getByName("preBuild").dependsOn("ktlintFormat")
+
 dependencies {
 
     implementation(libs.androidx.core.ktx)
