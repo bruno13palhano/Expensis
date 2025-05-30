@@ -4,5 +4,6 @@ data class Expense(
     val id: Long,
     val label: String,
     val amount: Double,
+    val category: Category,
     val date: Long,
 )

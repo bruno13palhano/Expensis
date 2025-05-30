@@ -7,6 +7,6 @@ interface ExpenseRepository {
     suspend fun insert(expense: Expense): Long
     suspend fun update(expense: Expense): Int
     suspend fun delete(id: Long): Int
-    suspend fun getById(id: Long): Expense
+    suspend fun getById(id: Long): Expense?
     fun getAll(): Flow<List<Expense>>
 }
