@@ -64,20 +64,23 @@ internal class ExpenseRepositoryImpl @Inject constructor(
 
         return expenseDao.getAll().map { expenses ->
             expenses.map { entity ->
-                val category = categoryCache[entity.category]
+                var category = categoryCache[entity.category]
                 if (category == null) {
                     val categoryEntity = categoryDao.getById(id = entity.category)
-                    categoryCache.put(
-                        entity.category,
-                        Category(id = categoryEntity?.id ?: 0L, name = categoryEntity?.name ?: ""),
+
+                    category = Category(
+                        id = categoryEntity?.id ?: 0L,
+                        name = categoryEntity?.name ?: "",
                     )
+
+                    categoryCache.put(entity.category, category)
                 }
 
                 Expense(
                     id = entity.id,
                     label = entity.label,
                     amount = entity.amount,
-                    category = Category(id = category?.id ?: 0L, name = category?.name ?: ""),
+                    category = category,
                     date = entity.date,
                 )
             }
