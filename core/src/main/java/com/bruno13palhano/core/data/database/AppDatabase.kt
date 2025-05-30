@@ -7,7 +7,7 @@ import com.bruno13palhano.core.data.model.ExpenseEntity
 
 @Database(
     entities = [
-        ExpenseEntity::class
+        ExpenseEntity::class,
     ],
     version = 1,
     exportSchema = false,

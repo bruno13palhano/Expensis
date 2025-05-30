@@ -15,7 +15,7 @@ import javax.inject.Singleton
 internal object DatabaseModule {
     @Provides
     @Singleton
-    fun provideExpenseDao(appDatabase: AppDatabase)  = appDatabase.expenseDao()
+    fun provideExpenseDao(appDatabase: AppDatabase) = appDatabase.expenseDao()
 
     @Provides
     @Singleton
@@ -23,7 +23,7 @@ internal object DatabaseModule {
         return Room.databaseBuilder(
             context,
             AppDatabase::class.java,
-            "app_db"
+            "app_db",
         )
             .fallbackToDestructiveMigration(false)
             .build()
