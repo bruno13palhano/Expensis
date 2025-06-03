@@ -8,17 +8,17 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 internal class CategoryRepositoryImpl @Inject constructor(
-    private val categoryDao: CategoryDao
+    private val categoryDao: CategoryDao,
 ) : CategoryRepository {
     override suspend fun insert(category: Category): Long {
         return categoryDao.insert(
-            category = CategoryEntity(id = category.id, name = category.name)
+            category = CategoryEntity(id = category.id, name = category.name),
         )
     }
 
     override suspend fun update(category: Category): Int {
         return categoryDao.update(
-            category = CategoryEntity(id = category.id, name = category.name)
+            category = CategoryEntity(id = category.id, name = category.name),
         )
     }
 
