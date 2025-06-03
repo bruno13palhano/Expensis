@@ -9,26 +9,23 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalConfiguration
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomDatePicker(
+    showDatePicker: Boolean,
     buttonLabel: String,
     dateInMillis: Long,
     onDateChange: (dateInMillis: Long) -> Unit,
+    onShowDatePickerChange: (show: Boolean) -> Unit,
 ) {
     val configuration = LocalConfiguration.current
-    var showDatePickerDialog by remember { mutableStateOf(false) }
     var datePickerState = rememberDatePickerState()
 
-    if (showDatePickerDialog) {
+    if (showDatePicker) {
         DatePickerDialog(
-            onDismissRequest = { showDatePickerDialog = false },
+            onDismissRequest = { onShowDatePickerChange(false) },
             confirmButton = {
                 Button(onClick = {
                     datePickerState.selectedDateMillis?.let { dateInMillis ->
