@@ -1,20 +1,31 @@
 package com.bruno13palhano.expensis.ui.screens.home
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bruno13palhano.core.model.Category
 import com.bruno13palhano.core.model.Expense
@@ -23,7 +34,11 @@ import com.bruno13palhano.expensis.ui.theme.ExpensisTheme
 
 @Composable
 fun HomeScreen(navigateToExpense: (Long) -> Unit, viewModel: HomeViewModel = viewModel()) {
-    HomeContent(expenses = emptyList(), navigateToExpense = navigateToExpense)
+    val expenses by viewModel.expenses.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) { viewModel.getExpenses() }
+
+    HomeContent(expenses = expenses, navigateToExpense = navigateToExpense)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -34,11 +49,22 @@ private fun HomeContent(expenses: List<Expense>, navigateToExpense: (id: Long) -
         topBar = {
             TopAppBar(title = { Text(text = stringResource(id = R.string.app_name)) })
         },
+        floatingActionButton = {
+            FloatingActionButton(onClick = {}) {
+                Icon(
+                    imageVector = Icons.Filled.Add,
+                    contentDescription = null,
+                )
+            }
+        },
     ) {
-        LazyColumn(contentPadding = it) {
+        LazyColumn(modifier = Modifier.padding(it), contentPadding = PaddingValues(4.dp)) {
             items(items = expenses, key = { expense -> expense.id }) { expense ->
                 ListItem(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .clickable { navigateToExpense(expense.id) }
+                        .padding(4.dp)
+                        .fillMaxWidth(),
                     headlineContent = { Text(text = expense.label) },
                     overlineContent = { Text(text = expense.category.name) },
                     trailingContent = { Text(text = "${expense.amount}") },
