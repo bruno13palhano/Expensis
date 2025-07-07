@@ -2,8 +2,9 @@ package com.bruno13palhano.core.model
 
 data class Expense(
     val id: Long,
-    val label: String,
+    val description: String,
     val amount: Double,
-    val category: Category,
+    val isIncome: Boolean,
     val date: Long,
+    val activity: String?,
 )

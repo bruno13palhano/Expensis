@@ -1,9 +1,7 @@
 package com.bruno13palhano.core.data.repository
 
-import com.bruno13palhano.core.data.dao.CategoryDao
 import com.bruno13palhano.core.data.dao.ExpenseDao
 import com.bruno13palhano.core.data.model.ExpenseEntity
-import com.bruno13palhano.core.model.Category
 import com.bruno13palhano.core.model.Expense
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
@@ -17,10 +15,11 @@ internal class ExpenseRepositoryImpl @Inject constructor(
         return expenseDao.insert(
             expense = ExpenseEntity(
                 id = expense.id,
-                label = expense.label,
+                description = expense.description,
                 amount = expense.amount,
-                category = expense.category.id,
+                isIncome = expense.isIncome,
                 date = expense.date,
+                activity = expense.activity,
             ),
         )
     }
@@ -29,10 +28,11 @@ internal class ExpenseRepositoryImpl @Inject constructor(
         return expenseDao.update(
             expense = ExpenseEntity(
                 id = expense.id,
-                label = expense.label,
+                description = expense.description,
                 amount = expense.amount,
-                category = expense.category.id,
+                isIncome = expense.isIncome,
                 date = expense.date,
+                activity = expense.activity,
             ),
         )
     }
@@ -45,14 +45,13 @@ internal class ExpenseRepositoryImpl @Inject constructor(
         val expenseEntity = expenseDao.getById(id = id)
 
         val expense = expenseEntity?.let { expense ->
-            val category = categoryDao.getById(id = expense.category)
-
             Expense(
                 id = expense.id,
-                label = expense.label,
+                description = expense.description,
                 amount = expense.amount,
-                category = Category(id = category?.id ?: 0L, name = category?.name ?: ""),
+                isIncome = expense.isIncome,
                 date = expense.date,
+                activity = expense.activity,
             )
         }
 
@@ -64,24 +63,13 @@ internal class ExpenseRepositoryImpl @Inject constructor(
 
         return expenseDao.getAll().map { expenses ->
             expenses.map { entity ->
-                var category = categoryCache[entity.category]
-                if (category == null) {
-                    val categoryEntity = categoryDao.getById(id = entity.category)
-
-                    category = Category(
-                        id = categoryEntity?.id ?: 0L,
-                        name = categoryEntity?.name ?: "",
-                    )
-
-                    categoryCache.put(entity.category, category)
-                }
-
                 Expense(
                     id = entity.id,
-                    label = entity.label,
+                    description = entity.description,
                     amount = entity.amount,
-                    category = category,
+                    isIncome = entity.isIncome,
                     date = entity.date,
+                    activity = entity.activity,
                 )
             }
         }

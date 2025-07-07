@@ -3,12 +3,13 @@ package com.bruno13palhano.core.data.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "Expense")
+@Entity(tableName = "Expenses")
 internal data class ExpenseEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Long,
-    val label: String,
+    val id: Long = 0L,
+    val description: String,
     val amount: Double,
-    val category: Long,
+    val isIncome: Boolean,
     val date: Long,
+    val activity: String? = null,
 )

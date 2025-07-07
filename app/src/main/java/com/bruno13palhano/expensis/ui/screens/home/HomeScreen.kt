@@ -27,7 +27,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.bruno13palhano.core.model.Category
 import com.bruno13palhano.core.model.Expense
 import com.bruno13palhano.expensis.R
 import com.bruno13palhano.expensis.ui.theme.ExpensisTheme
@@ -65,8 +64,8 @@ private fun HomeContent(expenses: List<Expense>, navigateToExpense: (id: Long) -
                         .clickable { navigateToExpense(expense.id) }
                         .padding(4.dp)
                         .fillMaxWidth(),
-                    headlineContent = { Text(text = expense.label) },
-                    overlineContent = { Text(text = expense.category.name) },
+                    headlineContent = { Text(text = expense.description) },
+                    overlineContent = { Text(text = expense.activity ?: "") },
                     trailingContent = { Text(text = "${expense.amount}") },
                     supportingContent = { Text(text = "${expense.date}") },
                 )
@@ -83,45 +82,51 @@ private fun HomePreview() {
             expenses = listOf(
                 Expense(
                     id = 1L,
-                    label = "Expense 1",
+                    description = "Expense 1",
                     amount = 12.5,
-                    category = Category(id = 1L, "Category 1"),
+                    isIncome = true,
                     date = 1L,
+                    activity = "Activity 1",
                 ),
                 Expense(
                     id = 2L,
-                    label = "Expense 2",
+                    description = "Expense 2",
                     amount = 12.5,
-                    category = Category(id = 2L, "Category 2"),
+                    isIncome = false,
                     date = 2L,
+                    activity = "Activity 2",
                 ),
                 Expense(
                     id = 3L,
-                    label = "Expense 3",
+                    description = "Expense 3",
                     amount = 12.5,
-                    category = Category(id = 3L, "Category 3"),
+                    isIncome = true,
                     date = 3L,
+                    activity = "Activity 1",
                 ),
                 Expense(
                     id = 4L,
-                    label = "Expense 4",
+                    description = "Expense 4",
                     amount = 12.5,
-                    category = Category(id = 4L, "Category 4"),
+                    isIncome = true,
                     date = 4L,
+                    activity = "Activity 1",
                 ),
                 Expense(
                     id = 5L,
-                    label = "Expense 5",
+                    description = "Expense 5",
                     amount = 12.5,
-                    category = Category(id = 5L, "Category 5"),
+                    isIncome = false,
                     date = 5L,
+                    activity = "Activity 3",
                 ),
                 Expense(
                     id = 6L,
-                    label = "Expense 6",
+                    description = "Expense 6",
                     amount = 12.5,
-                    category = Category(id = 6L, "Category 6"),
+                    isIncome = false,
                     date = 6L,
+                    activity = "Activity 4",
                 ),
             ),
             navigateToExpense = {},

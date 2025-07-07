@@ -6,9 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bruno13palhano.core.data.repository.CategoryRepository
 import com.bruno13palhano.core.data.repository.ExpenseRepository
-import com.bruno13palhano.core.model.Category
 import com.bruno13palhano.core.model.Expense
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -82,10 +80,8 @@ class ExpenseViewModel @Inject constructor(
     fun getExpense(id: Long) {
         viewModelScope.launch {
             expenseRepository.getById(id)?.let {
-                label = it.label
+                label = it.description
                 amount = it.amount.toString()
-                currentCategory = it.category
-                category = it.category.name
                 dateInMillis = it.date
             }
         }
@@ -99,20 +95,22 @@ class ExpenseViewModel @Inject constructor(
                 expenseRepository.insert(
                     expense = Expense(
                         id = id,
-                        label = label,
+                        description = label,
                         amount = amount.toDouble(),
-                        category = currentCategory.copy(id = categoryId),
+                        isIncome = false,
                         date = dateInMillis,
+                        activity = null,
                     ),
                 )
             } else {
                 expenseRepository.update(
                     expense = Expense(
                         id = id,
-                        label = label,
+                        description = label,
                         amount = amount.toDouble(),
-                        category = currentCategory,
+                        isIncome = false,
                         date = dateInMillis,
+                        activity = null,
                     ),
                 )
             }

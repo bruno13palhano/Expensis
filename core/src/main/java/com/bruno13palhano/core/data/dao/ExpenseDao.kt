@@ -16,12 +16,12 @@ internal interface ExpenseDao {
     @Update
     suspend fun update(expense: ExpenseEntity): Int
 
-    @Query("DELETE FROM Expense WHERE id = :id")
+    @Query("DELETE FROM Expenses WHERE id = :id")
     suspend fun delete(id: Long): Int
 
-    @Query("SELECT * FROM Expense WHERE id = :id")
+    @Query("SELECT * FROM Expenses WHERE id = :id")
     suspend fun getById(id: Long): ExpenseEntity?
 
-    @Query("SELECT * FROM Expense")
+    @Query("SELECT * FROM Expenses")
     fun getAll(): Flow<List<ExpenseEntity>>
 }
