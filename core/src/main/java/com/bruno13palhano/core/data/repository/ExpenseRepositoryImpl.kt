@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.map
 
 internal class ExpenseRepositoryImpl @Inject constructor(
     private val expenseDao: ExpenseDao,
-    private val categoryDao: CategoryDao,
 ) : ExpenseRepository {
     override suspend fun insert(expense: Expense): Long {
         return expenseDao.insert(
@@ -59,8 +58,6 @@ internal class ExpenseRepositoryImpl @Inject constructor(
     }
 
     override fun getAll(): Flow<List<Expense>> {
-        val categoryCache = hashMapOf<Long, Category>()
-
         return expenseDao.getAll().map { expenses ->
             expenses.map { entity ->
                 Expense(
