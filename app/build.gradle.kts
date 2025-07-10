@@ -72,4 +72,5 @@ dependencies {
     ksp(libs.androidx.hilt.compiler)
     implementation(libs.hilt.android)
     implementation(project(":core"))
+    implementation(libs.androidx.material.icons.extended)
 }
