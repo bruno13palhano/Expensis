@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">Expensis</string>
+    <string name="expense">Expense</string>
+    <string name="description">Description</string>
+    <string name="description_placeholder">Enter description</string>
+    <string name="amount">Amount</string>
+    <string name="amount_placeholder">Enter amount</string>
+    <string name="date">Date</string>
+    <string name="activity">Activity</string>
+    <string name="activity_placeholder">Enter activity</string>
+    <string name="save_expense">Save expense</string>
+    <string name="invalid_field_error">Invalid field</string>
+    <string name="unexpected_error">Something unexpected happened</string>
+    <string name="navigate_back">Navigate back</string>
+    <string name="toggle_income">Income toggle button</string>
+    <string name="debit">Debit</string>
+    <string name="income">Income</string>
 </resources>
