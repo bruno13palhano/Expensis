@@ -1,119 +1,88 @@
 package com.bruno13palhano.expensis.ui.screens.expenses
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableLongStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bruno13palhano.core.data.repository.ExpenseRepository
 import com.bruno13palhano.core.model.Expense
+import com.bruno13palhano.expensis.ui.shared.Container
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 @HiltViewModel
 class ExpenseViewModel @Inject constructor(
     private val expenseRepository: ExpenseRepository,
-    private val categoryRepository: CategoryRepository,
+    initialState: ExpenseState,
 ) : ViewModel() {
-    private var categories = MutableStateFlow(emptyList<Category>())
-    private var currentCategory = Category(0L, "")
-    var label by mutableStateOf("")
-        private set
-    var amount by mutableStateOf("")
-        private set
-    var category by mutableStateOf("")
-        private set
-    var dateInMillis by mutableLongStateOf(0L)
-        private set
-    var date by mutableStateOf("")
-        private set
-    var datePickerVisibility by mutableStateOf(false)
-        private set
+    val container: Container<ExpenseState, ExpenseSideEffect> = Container(
+        initialSTATE = initialState,
+        scope = viewModelScope,
+    )
 
-    fun updateLabel(label: String) {
-        this.label = label
-    }
-
-    fun updateAmount(amount: String) {
-        this.amount = amount
-    }
-
-    fun updateCategory(category: String) {
-        this.category = category
-    }
-
-    fun selectCategory(id: Long) {
-        categories.value.firstOrNull { it.id == id }?.let {
-            currentCategory = it
-        }
-    }
-
-    fun showDatePickerDialog(show: Boolean) {
-        datePickerVisibility = show
-    }
-
-    fun updateDate(dateInMillis: Long, date: String) {
-        this.dateInMillis = dateInMillis
-        this.date = date
-    }
-
-    fun getCategories() {
-        viewModelScope.launch {
-            categoryRepository.getAll().collect { categoryList ->
-                categories.update { categoryList }
+    fun onEvent(event: ExpenseEvent) {
+        when (event) {
+            is ExpenseEvent.GetExpense -> getExpense(id = event.id)
+            is ExpenseEvent.SaveExpense -> saveExpense()
+            is ExpenseEvent.UpdateDescription -> container.intent {
+                reduce { copy(description = event.description) }
+            }
+            is ExpenseEvent.UpdateAmount -> container.intent {
+                reduce { copy(amount = event.amount) }
+            }
+            is ExpenseEvent.ToggleIsIncome -> container.intent {
+                reduce { copy(isIncome = !isIncome) }
+            }
+            is ExpenseEvent.UpdateDate -> container.intent {
+                reduce { copy(dateInMillis = event.date) }
+            }
+            is ExpenseEvent.UpdateActivity -> container.intent {
+                reduce { copy(activity = event.activity) }
+            }
+            ExpenseEvent.ToggleDatePickerVisibility -> container.intent {
+                reduce { copy(isDatePickerVisible = !isDatePickerVisible) }
+            }
+            ExpenseEvent.NavigateBack -> container.intent {
+                postSideEffect(effect = ExpenseSideEffect.NavigateBack)
             }
         }
     }
 
-    private fun getCategory(id: Long) {
-        viewModelScope.launch {
-            categoryRepository.getById(id = id)?.let {
-                currentCategory = it
-            }
-        }
-    }
-
-    fun getExpense(id: Long) {
-        viewModelScope.launch {
-            expenseRepository.getById(id)?.let {
-                label = it.description
-                amount = it.amount.toString()
-                dateInMillis = it.date
-            }
-        }
-    }
-
-    fun saveExpense(id: Long) {
-        viewModelScope.launch {
-            if (id == 0L) {
-                val categoryId = categoryRepository.insert(category = currentCategory)
-
-                expenseRepository.insert(
-                    expense = Expense(
-                        id = id,
-                        description = label,
-                        amount = amount.toDouble(),
-                        isIncome = false,
-                        date = dateInMillis,
-                        activity = null,
-                    ),
-                )
-            } else {
-                expenseRepository.update(
-                    expense = Expense(
-                        id = id,
-                        description = label,
-                        amount = amount.toDouble(),
-                        isIncome = false,
-                        date = dateInMillis,
-                        activity = null,
-                    ),
+    private fun getExpense(id: Long) = container.intent {
+        expenseRepository.getById(id = id)?.let {
+            reduce {
+                copy(
+                    description = it.description,
+                    amount = it.amount.toString(),
+                    dateInMillis = it.date,
                 )
             }
+        }
+    }
+
+    fun saveExpense() = container.intent {
+        val id = container.state.value.id
+
+        if (id == 0L) {
+            expenseRepository.insert(
+                expense = Expense(
+                    id = id,
+                    description = container.state.value.description,
+                    amount = container.state.value.amount.toDouble(),
+                    isIncome = container.state.value.isIncome,
+                    date = container.state.value.dateInMillis,
+                    activity = container.state.value.activity,
+                ),
+            )
+        } else {
+            expenseRepository.update(
+                expense = Expense(
+                    id = id,
+                    description = container.state.value.description,
+                    amount = container.state.value.amount.toDouble(),
+                    isIncome = container.state.value.isIncome,
+                    date = container.state.value.dateInMillis,
+                    activity = container.state.value.activity,
+                ),
+            )
         }
     }
 }
