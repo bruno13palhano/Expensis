@@ -5,6 +5,7 @@ import com.bruno13palhano.expensis.ui.shared.ErrorType
 
 @Immutable
 data class ExpenseState(
+    val id: Long = 0L,
     val description: String = "",
     val amount: String = "",
     val isIncome: Boolean = false,
