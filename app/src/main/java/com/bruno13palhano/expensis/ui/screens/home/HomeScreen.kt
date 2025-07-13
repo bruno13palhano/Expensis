@@ -29,20 +29,28 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bruno13palhano.core.model.Expense
 import com.bruno13palhano.expensis.R
+import com.bruno13palhano.expensis.ui.shared.rememberFlowWithLifecycle
 import com.bruno13palhano.expensis.ui.theme.ExpensisTheme
 
 @Composable
 fun HomeScreen(navigateToExpense: (Long) -> Unit, viewModel: HomeViewModel = viewModel()) {
-    val expenses by viewModel.expenses.collectAsStateWithLifecycle()
+    val state by viewModel.container.state.collectAsStateWithLifecycle()
+    val sideEffect = rememberFlowWithLifecycle(flow = viewModel.container.sideEffect)
 
-    LaunchedEffect(Unit) { viewModel.getExpenses() }
+    LaunchedEffect(sideEffect) {
+        sideEffect.collect { effect ->
+            when (effect) {
+                is HomeSideEffect.NavigateToExpense -> navigateToExpense(effect.id)
+            }
+        }
+    }
 
-    HomeContent(expenses = expenses, navigateToExpense = navigateToExpense)
+    HomeContent(state = state, navigateToExpense = navigateToExpense)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun HomeContent(expenses: List<Expense>, navigateToExpense: (id: Long) -> Unit) {
+private fun HomeContent(state: HomeState, navigateToExpense: (id: Long) -> Unit) {
     Scaffold(
         modifier = Modifier.consumeWindowInsets(WindowInsets.safeDrawing),
         topBar = {
@@ -58,7 +66,7 @@ private fun HomeContent(expenses: List<Expense>, navigateToExpense: (id: Long) -
         },
     ) {
         LazyColumn(modifier = Modifier.padding(it), contentPadding = PaddingValues(4.dp)) {
-            items(items = expenses, key = { expense -> expense.id }) { expense ->
+            items(items = state.expenses, key = { expense -> expense.id }) { expense ->
                 ListItem(
                     modifier = Modifier
                         .clickable { navigateToExpense(expense.id) }
@@ -79,7 +87,7 @@ private fun HomeContent(expenses: List<Expense>, navigateToExpense: (id: Long) -
 private fun HomePreview() {
     ExpensisTheme {
         HomeContent(
-            expenses = listOf(
+            state = HomeState(expenses = listOf(
                 Expense(
                     id = 1L,
                     description = "Expense 1",
@@ -128,6 +136,7 @@ private fun HomePreview() {
                     date = 6L,
                     activity = "Activity 4",
                 ),
+            )
             ),
             navigateToExpense = {},
         )
