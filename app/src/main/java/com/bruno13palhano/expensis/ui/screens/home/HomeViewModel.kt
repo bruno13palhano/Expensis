@@ -26,7 +26,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getExpenses() = container.intent {
+    private fun getExpenses() = container.intent {
         expenseRepository.getAll().collect { expenses ->
             reduce { copy(expenses = expenses) }
         }
