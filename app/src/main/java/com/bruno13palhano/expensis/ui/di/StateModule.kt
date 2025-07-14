@@ -1,6 +1,7 @@
 package com.bruno13palhano.expensis.ui.di
 
 import com.bruno13palhano.expensis.ui.screens.expenses.ExpenseState
+import com.bruno13palhano.expensis.ui.screens.expenses.ExpensesState
 import com.bruno13palhano.expensis.ui.screens.home.HomeState
 import dagger.Module
 import dagger.Provides
@@ -18,4 +19,8 @@ object StateModule {
     @Provides
     @Singleton
     fun provideHomeState() = HomeState()
+
+    @Provides
+    @Singleton
+    fun provideExpensesState() = ExpensesState()
 }
