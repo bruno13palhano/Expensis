@@ -29,7 +29,10 @@ fun AppNavigation(modifier: Modifier = Modifier) {
     ) { key ->
         when (key) {
             Home -> NavEntry(key) {
-                HomeScreen(navigateToExpense = { backStack.add(Expense(id = it)) })
+                HomeScreen(
+                    navigateToNewExpense = { backStack.add(Expense(id = 0L)) },
+                    navigateToExpense = { backStack.add(Expense(id = it)) },
+                )
             }
 
             is Expense -> NavEntry(key) {
