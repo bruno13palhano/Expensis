@@ -20,6 +20,9 @@ class HomeViewModel @Inject constructor(
     fun onEvent(event: HomeEvent) {
         when (event) {
             HomeEvent.GetExpenses -> getExpenses()
+            HomeEvent.NavigateToNewExpense -> container.intent {
+                postSideEffect(effect = HomeSideEffect.NavigateToNewExpense)
+            }
             is HomeEvent.NavigateToExpense -> container.intent {
                 postSideEffect(effect = HomeSideEffect.NavigateToExpense(id = event.id))
             }

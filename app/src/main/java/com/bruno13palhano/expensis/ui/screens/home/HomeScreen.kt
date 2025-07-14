@@ -33,31 +33,36 @@ import com.bruno13palhano.expensis.ui.shared.rememberFlowWithLifecycle
 import com.bruno13palhano.expensis.ui.theme.ExpensisTheme
 
 @Composable
-fun HomeScreen(navigateToExpense: (Long) -> Unit, viewModel: HomeViewModel = viewModel()) {
+fun HomeScreen(
+    navigateToNewExpense: () -> Unit,
+    navigateToExpense: (Long) -> Unit,
+    viewModel: HomeViewModel = viewModel(),
+) {
     val state by viewModel.container.state.collectAsStateWithLifecycle()
     val sideEffect = rememberFlowWithLifecycle(flow = viewModel.container.sideEffect)
 
     LaunchedEffect(sideEffect) {
         sideEffect.collect { effect ->
             when (effect) {
+                HomeSideEffect.NavigateToNewExpense -> navigateToNewExpense()
                 is HomeSideEffect.NavigateToExpense -> navigateToExpense(effect.id)
             }
         }
     }
 
-    HomeContent(state = state, navigateToExpense = navigateToExpense)
+    HomeContent(state = state, onEvent = viewModel::onEvent)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun HomeContent(state: HomeState, navigateToExpense: (id: Long) -> Unit) {
+private fun HomeContent(state: HomeState, onEvent: (event: HomeEvent) -> Unit) {
     Scaffold(
         modifier = Modifier.consumeWindowInsets(WindowInsets.safeDrawing),
         topBar = {
             TopAppBar(title = { Text(text = stringResource(id = R.string.app_name)) })
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = {}) {
+            FloatingActionButton(onClick = { onEvent(HomeEvent.NavigateToNewExpense) }) {
                 Icon(
                     imageVector = Icons.Filled.Add,
                     contentDescription = null,
@@ -69,7 +74,7 @@ private fun HomeContent(state: HomeState, navigateToExpense: (id: Long) -> Unit)
             items(items = state.expenses, key = { expense -> expense.id }) { expense ->
                 ListItem(
                     modifier = Modifier
-                        .clickable { navigateToExpense(expense.id) }
+                        .clickable { onEvent(HomeEvent.NavigateToExpense(expense.id)) }
                         .padding(4.dp)
                         .fillMaxWidth(),
                     headlineContent = { Text(text = expense.description) },
@@ -87,58 +92,59 @@ private fun HomeContent(state: HomeState, navigateToExpense: (id: Long) -> Unit)
 private fun HomePreview() {
     ExpensisTheme {
         HomeContent(
-            state = HomeState(expenses = listOf(
-                Expense(
-                    id = 1L,
-                    description = "Expense 1",
-                    amount = 12.5,
-                    isIncome = true,
-                    date = 1L,
-                    activity = "Activity 1",
+            state = HomeState(
+                expenses = listOf(
+                    Expense(
+                        id = 1L,
+                        description = "Expense 1",
+                        amount = 12.5,
+                        isIncome = true,
+                        date = 1L,
+                        activity = "Activity 1",
+                    ),
+                    Expense(
+                        id = 2L,
+                        description = "Expense 2",
+                        amount = 12.5,
+                        isIncome = false,
+                        date = 2L,
+                        activity = "Activity 2",
+                    ),
+                    Expense(
+                        id = 3L,
+                        description = "Expense 3",
+                        amount = 12.5,
+                        isIncome = true,
+                        date = 3L,
+                        activity = "Activity 1",
+                    ),
+                    Expense(
+                        id = 4L,
+                        description = "Expense 4",
+                        amount = 12.5,
+                        isIncome = true,
+                        date = 4L,
+                        activity = "Activity 1",
+                    ),
+                    Expense(
+                        id = 5L,
+                        description = "Expense 5",
+                        amount = 12.5,
+                        isIncome = false,
+                        date = 5L,
+                        activity = "Activity 3",
+                    ),
+                    Expense(
+                        id = 6L,
+                        description = "Expense 6",
+                        amount = 12.5,
+                        isIncome = false,
+                        date = 6L,
+                        activity = "Activity 4",
+                    ),
                 ),
-                Expense(
-                    id = 2L,
-                    description = "Expense 2",
-                    amount = 12.5,
-                    isIncome = false,
-                    date = 2L,
-                    activity = "Activity 2",
-                ),
-                Expense(
-                    id = 3L,
-                    description = "Expense 3",
-                    amount = 12.5,
-                    isIncome = true,
-                    date = 3L,
-                    activity = "Activity 1",
-                ),
-                Expense(
-                    id = 4L,
-                    description = "Expense 4",
-                    amount = 12.5,
-                    isIncome = true,
-                    date = 4L,
-                    activity = "Activity 1",
-                ),
-                Expense(
-                    id = 5L,
-                    description = "Expense 5",
-                    amount = 12.5,
-                    isIncome = false,
-                    date = 5L,
-                    activity = "Activity 3",
-                ),
-                Expense(
-                    id = 6L,
-                    description = "Expense 6",
-                    amount = 12.5,
-                    isIncome = false,
-                    date = 6L,
-                    activity = "Activity 4",
-                ),
-            )
             ),
-            navigateToExpense = {},
+            onEvent = {},
         )
     }
 }
