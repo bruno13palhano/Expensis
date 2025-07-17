@@ -5,7 +5,7 @@ import com.bruno13palhano.core.model.Expense
 
 @Immutable
 data class ExpensesState(
-    val expenses: List<Expense> = emptyList()
+    val expenses: List<Expense> = emptyList(),
 )
 
 @Immutable
