@@ -15,4 +15,7 @@
     <string name="toggle_income">Income toggle button</string>
     <string name="debit">Debit</string>
     <string name="income">Income</string>
+    <string name="expense_command">to new expense</string>
+    <string name="expenses_command">to expenses</string>
+    <string name="analytics_command">to analytics</string>
 </resources>
