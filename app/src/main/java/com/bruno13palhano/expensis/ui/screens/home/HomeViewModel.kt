@@ -10,28 +10,50 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val expenseRepository: ExpenseRepository,
-    initialState: HomeState,
 ) : ViewModel() {
     val container: Container<HomeState, HomeSideEffect> = Container(
-        initialSTATE = initialState,
+        initialSTATE = HomeState(),
         scope = viewModelScope,
     )
 
     fun onEvent(event: HomeEvent) {
         when (event) {
-            HomeEvent.GetExpenses -> getExpenses()
+            HomeEvent.NavigateToAnalytics -> container.intent {
+                postSideEffect(effect = HomeSideEffect.NavigateToAnalytics)
+            }
+            HomeEvent.NavigateToExpenses -> container.intent {
+                postSideEffect(effect = HomeSideEffect.NavigateToExpenses)
+            }
             HomeEvent.NavigateToNewExpense -> container.intent {
                 postSideEffect(effect = HomeSideEffect.NavigateToNewExpense)
             }
-            is HomeEvent.NavigateToExpense -> container.intent {
-                postSideEffect(effect = HomeSideEffect.NavigateToExpense(id = event.id))
+            is HomeEvent.ProcessRecognizedText -> container.intent {
+                if (event.recognizedText == null){
+                    postSideEffect(effect = HomeSideEffect.ShowError)
+                } else {
+                    reduce { copy(recognizedText = event.recognizedText) }
+
+                    val command = getHomeCommand(event.recognizedText)
+                    postSideEffect(effect = HomeSideEffect.Command(command = command))
+                }
+            }
+            HomeEvent.VoiceCommand -> container.intent {
+                postSideEffect(effect = HomeSideEffect.StartVoiceRecognition)
             }
         }
     }
 
-    private fun getExpenses() = container.intent {
-        expenseRepository.getAll().collect { expenses ->
-            reduce { copy(expenses = expenses) }
+    private fun getHomeCommand(recognizedText: String?): HomeCommand {
+        if (recognizedText?.contains(other = "to new expense", ignoreCase = true) == true) {
+            return HomeCommand.NEW_EXPENSE
         }
+        if (recognizedText?.contains(other = "to expenses", ignoreCase = true) == true) {
+            return HomeCommand.EXPENSES
+        }
+        if (recognizedText?.contains(other = "to analytics", ignoreCase = true) == true) {
+            return HomeCommand.ANALYTICS
+        }
+
+        return HomeCommand.ERROR
     }
 }
