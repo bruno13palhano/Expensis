@@ -36,8 +36,8 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bruno13palhano.expensis.R
 import com.bruno13palhano.expensis.ui.components.CustomClickField
 import com.bruno13palhano.expensis.ui.components.CustomDatePicker
@@ -49,7 +49,7 @@ import com.bruno13palhano.expensis.ui.theme.ExpensisTheme
 import kotlinx.coroutines.launch
 
 @Composable
-fun ExpenseScreen(navigateBack: () -> Unit, viewModel: ExpenseViewModel = viewModel()) {
+fun ExpenseScreen(navigateBack: () -> Unit, viewModel: ExpenseViewModel = hiltViewModel()) {
     val state by viewModel.container.state.collectAsStateWithLifecycle()
     val sideEffect = rememberFlowWithLifecycle(flow = viewModel.container.sideEffect)
 

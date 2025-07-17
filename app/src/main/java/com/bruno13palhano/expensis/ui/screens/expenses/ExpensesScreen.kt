@@ -25,8 +25,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bruno13palhano.core.model.Expense
 import com.bruno13palhano.expensis.R
 import com.bruno13palhano.expensis.ui.shared.rememberFlowWithLifecycle
@@ -36,7 +36,7 @@ import com.bruno13palhano.expensis.ui.theme.ExpensisTheme
 fun ExpensesScreen(
     navigateToNewExpense: () -> Unit,
     navigateToExpense: (Long) -> Unit,
-    viewModel: ExpensesViewModel = viewModel(),
+    viewModel: ExpensesViewModel = hiltViewModel(),
 ) {
     val state by viewModel.container.state.collectAsStateWithLifecycle()
     val sideEffect = rememberFlowWithLifecycle(flow = viewModel.container.sideEffect)
