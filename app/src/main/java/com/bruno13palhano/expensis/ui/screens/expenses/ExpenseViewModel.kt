@@ -11,10 +11,9 @@ import javax.inject.Inject
 @HiltViewModel
 class ExpenseViewModel @Inject constructor(
     private val expenseRepository: ExpenseRepository,
-    initialState: ExpenseState,
 ) : ViewModel() {
     val container: Container<ExpenseState, ExpenseSideEffect> = Container(
-        initialSTATE = initialState,
+        initialSTATE = ExpenseState(),
         scope = viewModelScope,
     )
 
