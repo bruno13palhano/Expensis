@@ -15,7 +15,10 @@ sealed interface HomeEvent {
     data object NavigateToExpenses : HomeEvent
     data object NavigateToAnalytics : HomeEvent
     data object VoiceCommand : HomeEvent
-    data class ProcessRecognizedText(val recognizedText: String?) : HomeEvent
+    data class ProcessRecognizedText(
+        val recognizedText: String?,
+        val command: HomeCommand,
+    ) : HomeEvent
 }
 
 @Immutable

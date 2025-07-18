@@ -1,6 +1,7 @@
 package com.bruno13palhano.expensis.ui.screens.home
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.speech.RecognizerIntent
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -26,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -47,6 +49,10 @@ fun HomeScreen(
 
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val speechInputDialogMessage = stringResource(id = R.string.say_command)
+    val unknownCommandMessage = stringResource(id = R.string.unknown_command)
+    val unexpectedErrorMessage = stringResource(id = R.string.unexpected_error)
 
     val speechLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),
@@ -56,7 +62,13 @@ fun HomeScreen(
             val matches = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
             val recognizedText = matches?.firstOrNull()
 
-            viewModel.onEvent(event = HomeEvent.ProcessRecognizedText(recognizedText = recognizedText))
+            val command = getHomeCommand(context = context, recognizedText = recognizedText)
+            viewModel.onEvent(
+                event = HomeEvent.ProcessRecognizedText(
+                    recognizedText = recognizedText,
+                    command = command,
+                ),
+            )
         }
     }
 
@@ -67,7 +79,7 @@ fun HomeScreen(
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM,
             )
             putExtra(RecognizerIntent.EXTRA_LANGUAGE, java.util.Locale.getDefault())
-            putExtra(RecognizerIntent.EXTRA_PROMPT, "Say the command")
+            putExtra(RecognizerIntent.EXTRA_PROMPT, speechInputDialogMessage)
         }
         speechLauncher.launch(intent)
     }
@@ -82,7 +94,7 @@ fun HomeScreen(
                 HomeSideEffect.ShowError -> {
                     scope.launch {
                         snackbarHostState.showSnackbar(
-                            message = "Don't get it",
+                            message = unexpectedErrorMessage,
                             withDismissAction = true,
                         )
                     }
@@ -95,7 +107,7 @@ fun HomeScreen(
                         HomeCommand.ERROR -> {
                             scope.launch {
                                 snackbarHostState.showSnackbar(
-                                    message = "Unknown command",
+                                    message = unknownCommandMessage,
                                     withDismissAction = true,
                                 )
                             }
@@ -111,6 +123,32 @@ fun HomeScreen(
         state = state,
         onEvent = viewModel::onEvent,
     )
+}
+
+private fun getHomeCommand(context: Context, recognizedText: String?): HomeCommand {
+    if (recognizedText?.contains(
+            other = context.getString(R.string.expense_command),
+            ignoreCase = true,
+        ) == true
+    ) {
+        return HomeCommand.NEW_EXPENSE
+    }
+    if (recognizedText?.contains(
+            other = context.getString(R.string.expenses_command),
+            ignoreCase = true,
+        ) == true
+    ) {
+        return HomeCommand.EXPENSES
+    }
+    if (recognizedText?.contains(
+            other = context.getString(R.string.analytics_command),
+            ignoreCase = true,
+        ) == true
+    ) {
+        return HomeCommand.ANALYTICS
+    }
+
+    return HomeCommand.ERROR
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -136,7 +174,6 @@ private fun HomeContent(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
     ) {
         Column(modifier = Modifier.padding(it)) {
-
         }
     }
 }
