@@ -18,4 +18,6 @@
     <string name="expense_command">to new expense</string>
     <string name="expenses_command">to expenses</string>
     <string name="analytics_command">to analytics</string>
+    <string name="say_command">Say the command</string>
+    <string name="unknown_command">Unknown command</string>
 </resources>
