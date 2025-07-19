@@ -4,5 +4,6 @@ enum class HomeCommand {
     NEW_EXPENSE,
     EXPENSES,
     ANALYTICS,
+    COMMANDS,
     ERROR,
 }
