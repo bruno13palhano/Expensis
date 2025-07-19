@@ -293,7 +293,7 @@ private fun HomeContent(
                         .padding(8.dp)
                         .align(Alignment.CenterHorizontally),
                     text = "All Commands",
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.titleLarge,
                 )
 
                 val commandsInfo = listOf(
