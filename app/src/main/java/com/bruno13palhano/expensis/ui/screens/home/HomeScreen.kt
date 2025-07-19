@@ -6,6 +6,7 @@ import android.content.Intent
 import android.speech.RecognizerIntent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Mic
@@ -42,6 +44,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -231,6 +234,8 @@ private fun HomeContent(
                 Box(
                     modifier = Modifier
                         .padding(start = 8.dp, top = 8.dp, end = 4.dp, bottom = 4.dp)
+                        .clip(shape = RoundedCornerShape(5))
+                        .background(color = MaterialTheme.colorScheme.primary)
                         .sizeIn(minHeight = 200.dp)
                         .weight(1f)
                         .clickable { onEvent(HomeEvent.NavigateToNewExpense) },
@@ -242,9 +247,12 @@ private fun HomeContent(
                 Box(
                     modifier = Modifier
                         .padding(start = 4.dp, top = 8.dp, end = 8.dp, bottom = 4.dp)
+                        .clip(shape = RoundedCornerShape(5))
+                        .background(color = MaterialTheme.colorScheme.primary)
                         .sizeIn(minHeight = 200.dp)
                         .weight(1f)
-                        .clickable { onEvent(HomeEvent.NavigateToExpenses) },
+                        .clickable { onEvent(HomeEvent.NavigateToExpenses) }
+                        .background(color = MaterialTheme.colorScheme.primary),
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
@@ -256,9 +264,12 @@ private fun HomeContent(
                 Box(
                     modifier = Modifier
                         .padding(start = 8.dp, top = 4.dp, end = 4.dp, bottom = 8.dp)
+                        .clip(shape = RoundedCornerShape(5))
+                        .background(color = MaterialTheme.colorScheme.primary)
                         .sizeIn(minHeight = 200.dp)
                         .weight(1f)
-                        .clickable { onEvent(HomeEvent.NavigateToAnalytics) },
+                        .clickable { onEvent(HomeEvent.NavigateToAnalytics) }
+                        .background(color = MaterialTheme.colorScheme.primary),
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(text = stringResource(id = R.string.analytics))
@@ -267,9 +278,12 @@ private fun HomeContent(
                 Box(
                     modifier = Modifier
                         .padding(start = 4.dp, top = 4.dp, end = 8.dp, bottom = 8.dp)
+                        .clip(shape = RoundedCornerShape(5))
+                        .background(color = MaterialTheme.colorScheme.primary)
                         .sizeIn(minHeight = 200.dp)
                         .weight(1f)
-                        .clickable { onEvent(HomeEvent.ToggleCommandsVisibility) },
+                        .clickable { onEvent(HomeEvent.ToggleCommandsVisibility) }
+                        .background(color = MaterialTheme.colorScheme.primary),
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
