@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Expensis</string>
     <string name="expense">Expense</string>
+    <string name="new_expense">New expense</string>
+    <string name="expenses">Expenses</string>
+    <string name="analytics">Analytics</string>
+    <string name="commands">Commands</string>
     <string name="description">Description</string>
     <string name="description_placeholder">Enter description</string>
     <string name="amount">Amount</string>
@@ -20,4 +24,6 @@
     <string name="analytics_command">to analytics</string>
     <string name="say_command">Say the command</string>
     <string name="unknown_command">Unknown command</string>
+    <string name="profit_visibility_on">Profit visibility on</string>
+    <string name="profit_visibility_off">Profit visibility off</string>
 </resources>
