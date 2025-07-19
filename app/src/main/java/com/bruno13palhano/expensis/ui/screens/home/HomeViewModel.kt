@@ -27,6 +27,9 @@ class HomeViewModel @Inject constructor(
             HomeEvent.NavigateToNewExpense -> container.intent {
                 postSideEffect(effect = HomeSideEffect.NavigateToNewExpense)
             }
+            HomeEvent.ToggleProfitVisibility -> container.intent {
+                reduce { copy(isProfitVisible = !isProfitVisible) }
+            }
             is HomeEvent.ProcessRecognizedText -> container.intent {
                 if (event.recognizedText == null) {
                     postSideEffect(effect = HomeSideEffect.ShowError)

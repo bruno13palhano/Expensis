@@ -15,6 +15,7 @@ sealed interface HomeEvent {
     data object NavigateToExpenses : HomeEvent
     data object NavigateToAnalytics : HomeEvent
     data object VoiceCommand : HomeEvent
+    data object ToggleProfitVisibility : HomeEvent
     data class ProcessRecognizedText(
         val recognizedText: String?,
         val command: HomeCommand,
