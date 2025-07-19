@@ -19,11 +19,17 @@
     <string name="toggle_income">Income toggle button</string>
     <string name="debit">Debit</string>
     <string name="income">Income</string>
-    <string name="expense_command">to new expense</string>
-    <string name="expenses_command">to expenses</string>
-    <string name="analytics_command">to analytics</string>
+    <string name="new_expense_command">TO NEW EXPENSE</string>
+    <string name="expenses_command">TO EXPENSES</string>
+    <string name="analytics_command">TO ANALYTICS</string>
+    <string name="show_commands">SHOW COMMANDS</string>
     <string name="say_command">Say the command</string>
     <string name="unknown_command">Unknown command</string>
     <string name="profit_visibility_on">Profit visibility on</string>
     <string name="profit_visibility_off">Profit visibility off</string>
+    <string name="dots">\u25CF\u25CF\u25CF\u25CF</string>
+    <string name="new_expense_command_info">Navigate to new expense.</string>
+    <string name="expenses_command_info">Navigate to expenses.</string>
+    <string name="analytics_command_info">Navigate to analytics.</string>
+    <string name="commands_info">Show all commands.</string>
 </resources>
