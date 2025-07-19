@@ -30,12 +30,15 @@ class HomeViewModel @Inject constructor(
             HomeEvent.ToggleProfitVisibility -> container.intent {
                 reduce { copy(isProfitVisible = !isProfitVisible) }
             }
+            HomeEvent.ToggleCommandsVisibility -> container.intent {
+                reduce { copy(isCommandsInfoVisible = !isCommandsInfoVisible) }
+            }
             is HomeEvent.ProcessRecognizedText -> container.intent {
                 if (event.recognizedText == null) {
                     postSideEffect(effect = HomeSideEffect.ShowError)
                 } else {
                     reduce { copy(recognizedText = event.recognizedText) }
-                    postSideEffect(effect = HomeSideEffect.Command(command = event.command))
+                    postSideEffect(effect = HomeSideEffect.NavigateTo(command = event.command))
                 }
             }
             HomeEvent.VoiceCommand -> container.intent {

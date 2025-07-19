@@ -7,6 +7,7 @@ data class HomeState(
     val profit: Double = 0.0,
     val recognizedText: String = "",
     val isProfitVisible: Boolean = false,
+    val isCommandsInfoVisible: Boolean = false,
 )
 
 @Immutable
@@ -16,6 +17,7 @@ sealed interface HomeEvent {
     data object NavigateToAnalytics : HomeEvent
     data object VoiceCommand : HomeEvent
     data object ToggleProfitVisibility : HomeEvent
+    data object ToggleCommandsVisibility : HomeEvent
     data class ProcessRecognizedText(
         val recognizedText: String?,
         val command: HomeCommand,
@@ -29,5 +31,5 @@ sealed interface HomeSideEffect {
     data object NavigateToAnalytics : HomeSideEffect
     data object StartVoiceRecognition : HomeSideEffect
     data object ShowError : HomeSideEffect
-    data class Command(val command: HomeCommand) : HomeSideEffect
+    data class NavigateTo(val command: HomeCommand) : HomeSideEffect
 }
