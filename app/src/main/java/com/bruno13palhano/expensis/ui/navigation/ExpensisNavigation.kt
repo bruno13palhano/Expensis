@@ -9,7 +9,9 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
+import com.bruno13palhano.expensis.ui.screens.analytics.AnalyticsScreen
 import com.bruno13palhano.expensis.ui.screens.expenses.ExpenseScreen
+import com.bruno13palhano.expensis.ui.screens.expenses.ExpensesScreen
 import com.bruno13palhano.expensis.ui.screens.home.HomeScreen
 import kotlinx.serialization.Serializable
 
@@ -28,15 +30,28 @@ fun AppNavigation(modifier: Modifier = Modifier) {
         onBack = { backStack.removeLastOrNull() },
     ) { key ->
         when (key) {
-            Home -> NavEntry(key) {
+            Home -> NavEntry(key) { entry ->
                 HomeScreen(
                     navigateToNewExpense = { backStack.add(Expense(id = 0L)) },
-                    navigateToExpense = { backStack.add(Expense(id = it)) },
+                    navigateToExpenses = { backStack.add(Expenses) },
+                    navigateToAnalytics = { backStack.add(Analytics) },
                 )
             }
 
             is Expense -> NavEntry(key) {
                 ExpenseScreen(navigateBack = { backStack.removeLastOrNull() })
+            }
+
+            is Expenses -> NavEntry(key) {
+                ExpensesScreen(
+                    navigateToNewExpense = { backStack.add(Expense(id = 0L)) },
+                    navigateToExpense = { id -> backStack.add(Expense(id = id)) },
+                    navigateBack = { backStack.removeLastOrNull() },
+                )
+            }
+
+            is Analytics -> NavEntry(key) {
+                AnalyticsScreen(navigateBack = { backStack.removeLastOrNull() })
             }
 
             else -> {
@@ -51,3 +66,9 @@ data object Home : NavKey
 
 @Serializable
 data class Expense(val id: Long) : NavKey
+
+@Serializable
+data object Expenses : NavKey
+
+@Serializable
+data object Analytics : NavKey
