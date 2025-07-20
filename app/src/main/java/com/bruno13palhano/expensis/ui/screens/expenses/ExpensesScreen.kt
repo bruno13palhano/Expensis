@@ -72,7 +72,7 @@ private fun ExpensesContent(state: ExpensesState, onEvent: (event: ExpensesEvent
                             contentDescription = stringResource(id = R.string.navigate_back),
                         )
                     }
-                }
+                },
             )
         },
         floatingActionButton = {
