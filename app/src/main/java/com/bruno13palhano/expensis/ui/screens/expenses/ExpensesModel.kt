@@ -13,10 +13,12 @@ sealed interface ExpensesEvent {
     data object GetExpenses : ExpensesEvent
     data object NavigateToNewExpense : ExpensesEvent
     data class NavigateToExpense(val id: Long) : ExpensesEvent
+    data object NavigateBack : ExpensesEvent
 }
 
 @Immutable
 sealed interface ExpensesSideEffect {
     data object NavigateToNewExpense : ExpensesSideEffect
     data class NavigateToExpense(val id: Long) : ExpensesSideEffect
+    data object NavigateBack : ExpensesSideEffect
 }

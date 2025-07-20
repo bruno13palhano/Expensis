@@ -10,10 +10,12 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -36,6 +38,7 @@ import com.bruno13palhano.expensis.ui.theme.ExpensisTheme
 fun ExpensesScreen(
     navigateToNewExpense: () -> Unit,
     navigateToExpense: (Long) -> Unit,
+    navigateBack: () -> Unit,
     viewModel: ExpensesViewModel = hiltViewModel(),
 ) {
     val state by viewModel.container.state.collectAsStateWithLifecycle()
@@ -46,6 +49,7 @@ fun ExpensesScreen(
             when (effect) {
                 ExpensesSideEffect.NavigateToNewExpense -> navigateToNewExpense()
                 is ExpensesSideEffect.NavigateToExpense -> navigateToExpense(effect.id)
+                ExpensesSideEffect.NavigateBack -> navigateBack()
             }
         }
     }
@@ -59,7 +63,17 @@ private fun ExpensesContent(state: ExpensesState, onEvent: (event: ExpensesEvent
     Scaffold(
         modifier = Modifier.consumeWindowInsets(WindowInsets.safeDrawing),
         topBar = {
-            TopAppBar(title = { Text(text = stringResource(id = R.string.app_name)) })
+            TopAppBar(
+                title = { Text(text = stringResource(id = R.string.app_name)) },
+                navigationIcon = {
+                    IconButton(onClick = { onEvent(ExpensesEvent.NavigateBack) }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = stringResource(id = R.string.navigate_back),
+                        )
+                    }
+                }
+            )
         },
         floatingActionButton = {
             FloatingActionButton(onClick = { onEvent(ExpensesEvent.NavigateToNewExpense) }) {

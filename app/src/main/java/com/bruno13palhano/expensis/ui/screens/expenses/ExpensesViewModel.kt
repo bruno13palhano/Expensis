@@ -25,6 +25,9 @@ class ExpensesViewModel @Inject constructor(
             is ExpensesEvent.NavigateToExpense -> container.intent {
                 postSideEffect(effect = ExpensesSideEffect.NavigateToExpense(id = event.id))
             }
+            ExpensesEvent.NavigateBack -> container.intent {
+                postSideEffect(effect = ExpensesSideEffect.NavigateBack)
+            }
         }
     }
 
