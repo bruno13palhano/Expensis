@@ -74,4 +74,5 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(project(":core"))
     implementation(libs.androidx.material.icons.extended)
+    implementation(libs.vico)
 }
