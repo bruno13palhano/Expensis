@@ -32,4 +32,5 @@
     <string name="expenses_command_info">Navigate to expenses.</string>
     <string name="analytics_command_info">Navigate to analytics.</string>
     <string name="commands_info">Show all commands.</string>
+    <string name="voice_command_button">Voice command button</string>
 </resources>

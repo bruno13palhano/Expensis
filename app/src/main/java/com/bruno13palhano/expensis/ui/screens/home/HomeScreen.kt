@@ -193,7 +193,7 @@ private fun HomeContent(
             FloatingActionButton(onClick = { onEvent(HomeEvent.VoiceCommand) }) {
                 Icon(
                     imageVector = Icons.Filled.Mic,
-                    contentDescription = null,
+                    contentDescription = stringResource(id = R.string.voice_command_button),
                 )
             }
         },
