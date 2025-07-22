@@ -19,7 +19,7 @@ class AnalyticsViewModel @Inject constructor() : ViewModel() {
             AnalyticsEvent.NavigateBack -> container.intent {
                 postSideEffect(effect = AnalyticsSideEffect.NavigateBack)
             }
-            AnalyticsEvent.UpdateAmount -> container.intent { }
+            AnalyticsEvent.UpdateAnalyticsValues -> container.intent { }
         }
     }
 

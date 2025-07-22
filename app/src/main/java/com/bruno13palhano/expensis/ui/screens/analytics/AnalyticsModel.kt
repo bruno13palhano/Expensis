@@ -13,7 +13,7 @@ data class AnalyticsState(
 @Immutable
 sealed interface AnalyticsEvent {
     data object UpdateChart : AnalyticsEvent
-    data object UpdateAmount : AnalyticsEvent
+    data object UpdateAnalyticsValues : AnalyticsEvent
     data object NavigateBack : AnalyticsEvent
 }
 
