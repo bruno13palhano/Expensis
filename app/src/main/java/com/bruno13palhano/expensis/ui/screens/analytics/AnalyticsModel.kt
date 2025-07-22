@@ -12,8 +12,7 @@ data class AnalyticsState(
 
 @Immutable
 sealed interface AnalyticsEvent {
-    data object UpdateChart : AnalyticsEvent
-    data object UpdateAnalyticsValues : AnalyticsEvent
+    data class UpdateAnalytics(val groupBy: AnalyticsGroupBy) : AnalyticsEvent
     data object NavigateBack : AnalyticsEvent
 }
 
@@ -21,3 +20,5 @@ sealed interface AnalyticsEvent {
 sealed interface AnalyticsSideEffect {
     data object NavigateBack : AnalyticsSideEffect
 }
+
+enum class AnalyticsGroupBy { MONTH, WEEK }

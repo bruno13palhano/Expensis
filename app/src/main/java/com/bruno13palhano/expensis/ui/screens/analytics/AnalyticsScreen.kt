@@ -4,10 +4,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -21,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bruno13palhano.expensis.R
@@ -42,7 +45,7 @@ fun AnalyticsScreen(navigateBack: () -> Unit, viewModel: AnalyticsViewModel = hi
     val sideEffect = rememberFlowWithLifecycle(flow = viewModel.container.sideEffect)
 
     LaunchedEffect(Unit) {
-        viewModel.onEvent(event = AnalyticsEvent.UpdateChart)
+        viewModel.onEvent(event = AnalyticsEvent.UpdateAnalytics(groupBy = AnalyticsGroupBy.MONTH))
     }
 
     LaunchedEffect(sideEffect) {
@@ -63,7 +66,9 @@ private fun AnalyticsContent(state: AnalyticsState, onEvent: (event: AnalyticsEv
     LaunchedEffect(state.chartEntries) {
         modelProducer.runTransaction {
             if (state.chartEntries.isNotEmpty()) {
-                columnSeries { state.chartEntries.forEach { series(it) } }
+                columnSeries {
+                    state.chartEntries.forEach { series(it) }
+                }
             }
         }
     }
@@ -85,6 +90,23 @@ private fun AnalyticsContent(state: AnalyticsState, onEvent: (event: AnalyticsEv
         },
     ) {
         Column(modifier = Modifier.padding(it)) {
+            ElevatedCard(modifier = Modifier.padding(8.dp)) {
+                Text(
+                    modifier = Modifier
+                        .padding(start = 8.dp, top = 8.dp, end = 8.dp)
+                        .fillMaxWidth(),
+                    text = stringResource(id = R.string.amount_tag, state.amount),
+                )
+                Text(
+                    modifier = Modifier.padding(start = 8.dp, top = 8.dp, end = 8.dp)
+                        .fillMaxWidth(),
+                    text = stringResource(id = R.string.profit_tag, state.profit),
+                )
+                Text(
+                    modifier = Modifier.padding(8.dp),
+                    text = stringResource(id = R.string.debit_tag, state.debit),
+                )
+            }
             CartesianChartHost(
                 chart = rememberCartesianChart(
                     rememberColumnCartesianLayer(),
@@ -102,6 +124,13 @@ private fun AnalyticsContent(state: AnalyticsState, onEvent: (event: AnalyticsEv
 @Composable
 private fun AnalyticsPreview() {
     ExpensisTheme {
-        AnalyticsContent(state = AnalyticsState(), onEvent = {})
+        AnalyticsContent(
+            state = AnalyticsState(
+                amount = 400.0,
+                profit = 300.0,
+                debit = 100.0,
+            ),
+            onEvent = {},
+        )
     }
 }
