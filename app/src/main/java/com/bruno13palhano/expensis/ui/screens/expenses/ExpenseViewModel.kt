@@ -83,5 +83,7 @@ class ExpenseViewModel @Inject constructor(
                 ),
             )
         }
+
+        postSideEffect(effect = ExpenseSideEffect.NavigateBack)
     }
 }

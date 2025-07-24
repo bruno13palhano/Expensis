@@ -49,7 +49,11 @@ import com.bruno13palhano.expensis.ui.theme.ExpensisTheme
 import kotlinx.coroutines.launch
 
 @Composable
-fun ExpenseScreen(navigateBack: () -> Unit, viewModel: ExpenseViewModel = hiltViewModel()) {
+fun ExpenseScreen(
+    id: Long,
+    navigateBack: () -> Unit,
+    viewModel: ExpenseViewModel = hiltViewModel(),
+) {
     val state by viewModel.container.state.collectAsStateWithLifecycle()
     val sideEffect = rememberFlowWithLifecycle(flow = viewModel.container.sideEffect)
 
@@ -59,6 +63,10 @@ fun ExpenseScreen(navigateBack: () -> Unit, viewModel: ExpenseViewModel = hiltVi
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
     val errorMessages = getErrorMessage()
+
+    LaunchedEffect(Unit) {
+        if (id != 0L) viewModel.onEvent(event = ExpenseEvent.GetExpense(id = id))
+    }
 
     LaunchedEffect(Unit) {
         sideEffect.collect { effect ->

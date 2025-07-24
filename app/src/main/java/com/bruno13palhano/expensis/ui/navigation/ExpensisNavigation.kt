@@ -39,7 +39,10 @@ fun AppNavigation(modifier: Modifier = Modifier) {
             }
 
             is Expense -> NavEntry(key) {
-                ExpenseScreen(navigateBack = { backStack.removeLastOrNull() })
+                ExpenseScreen(
+                    id = key.id,
+                    navigateBack = { backStack.removeLastOrNull() },
+                )
             }
 
             is Expenses -> NavEntry(key) {
