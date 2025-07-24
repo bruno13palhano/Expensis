@@ -44,6 +44,10 @@ fun ExpensesScreen(
     val state by viewModel.container.state.collectAsStateWithLifecycle()
     val sideEffect = rememberFlowWithLifecycle(flow = viewModel.container.sideEffect)
 
+    LaunchedEffect(Unit) {
+        viewModel.onEvent(event = ExpensesEvent.GetExpenses)
+    }
+
     LaunchedEffect(sideEffect) {
         sideEffect.collect { effect ->
             when (effect) {
