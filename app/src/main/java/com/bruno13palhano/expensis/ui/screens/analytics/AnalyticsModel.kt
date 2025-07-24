@@ -8,14 +8,13 @@ data class AnalyticsState(
     val profit: Double = 0.0,
     val debit: Double = 0.0,
     val chartEntries: List<List<Float>> = emptyList(),
-    val isMenuVisible : Boolean = false,
+    val isMenuVisible: Boolean = false,
 )
 
 @Immutable
 sealed interface AnalyticsEvent {
     data class UpdateAnalytics(val groupBy: AnalyticsGroupBy) : AnalyticsEvent
     data object ToggleMenu : AnalyticsEvent
-    data class MenuItemSelected(val index: Int) : AnalyticsEvent
     data object NavigateBack : AnalyticsEvent
 }
 

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -27,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bruno13palhano.expensis.R
+import com.bruno13palhano.expensis.ui.components.MoreVertMenu
 import com.bruno13palhano.expensis.ui.shared.rememberFlowWithLifecycle
 import com.bruno13palhano.expensis.ui.theme.ExpensisTheme
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
@@ -83,6 +85,26 @@ private fun AnalyticsContent(state: AnalyticsState, onEvent: (event: AnalyticsEv
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = stringResource(id = R.string.navigate_back),
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(onClick = { onEvent(AnalyticsEvent.ToggleMenu) }) {
+                        Icon(
+                            imageVector = Icons.Filled.MoreVert,
+                            contentDescription = null,
+                        )
+
+                        val items = mapOf(
+                            AnalyticsGroupBy.MONTH to stringResource(id = R.string.month),
+                            AnalyticsGroupBy.WEEK to stringResource(id = R.string.week),
+                        )
+
+                        MoreVertMenu(
+                            items = items,
+                            expanded = state.isMenuVisible,
+                            onDismissRequest = { onEvent(AnalyticsEvent.ToggleMenu) },
+                            onItemClick = { onEvent(AnalyticsEvent.UpdateAnalytics(groupBy = it)) },
                         )
                     }
                 },

@@ -23,6 +23,11 @@ class AnalyticsViewModel @Inject constructor(
     fun onEvent(event: AnalyticsEvent) {
         when (event) {
             is AnalyticsEvent.UpdateAnalytics -> updateChart(groupBy = event.groupBy)
+
+            AnalyticsEvent.ToggleMenu -> container.intent {
+                reduce { copy(isMenuVisible = !isMenuVisible) }
+            }
+
             AnalyticsEvent.NavigateBack -> container.intent {
                 postSideEffect(effect = AnalyticsSideEffect.NavigateBack)
             }
