@@ -33,4 +33,7 @@
     <string name="analytics_command_info">Navigate to analytics.</string>
     <string name="commands_info">Show all commands.</string>
     <string name="voice_command_button">Voice command button</string>
+    <string name="amount_tag">Amount: R$ %.2f</string>
+    <string name="profit_tag">Profit: R$ %.2f</string>
+    <string name="debit_tag">Debit: R$ %.2f</string>
 </resources>
