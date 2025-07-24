@@ -43,6 +43,7 @@ import com.bruno13palhano.expensis.ui.components.CustomClickField
 import com.bruno13palhano.expensis.ui.components.CustomDatePicker
 import com.bruno13palhano.expensis.ui.components.CustomDoubleField
 import com.bruno13palhano.expensis.ui.components.CustomTextField
+import com.bruno13palhano.expensis.ui.shared.currentDate
 import com.bruno13palhano.expensis.ui.shared.getErrorMessage
 import com.bruno13palhano.expensis.ui.shared.rememberFlowWithLifecycle
 import com.bruno13palhano.expensis.ui.theme.ExpensisTheme
@@ -65,7 +66,11 @@ fun ExpenseScreen(
     val errorMessages = getErrorMessage()
 
     LaunchedEffect(Unit) {
-        if (id != 0L) viewModel.onEvent(event = ExpenseEvent.GetExpense(id = id))
+        if (id != 0L) {
+            viewModel.onEvent(event = ExpenseEvent.GetExpense(id = id))
+        } else {
+            viewModel.onEvent(event = ExpenseEvent.UpdateDate(date = currentDate()))
+        }
     }
 
     LaunchedEffect(Unit) {

@@ -30,6 +30,7 @@ fun CustomDatePicker(
                 Button(onClick = {
                     datePickerState.selectedDateMillis?.let { dateInMillis ->
                         onDateChange(dateInMillis)
+                        onShowDatePickerChange(false)
                     }
                 }) {
                     Text(text = buttonLabel)

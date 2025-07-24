@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.bruno13palhano.core.data.repository.ExpenseRepository
 import com.bruno13palhano.core.model.Expense
 import com.bruno13palhano.expensis.ui.shared.Container
+import com.bruno13palhano.expensis.ui.shared.dateFormat
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -31,7 +32,12 @@ class ExpenseViewModel @Inject constructor(
                 reduce { copy(isIncome = !isIncome) }
             }
             is ExpenseEvent.UpdateDate -> container.intent {
-                reduce { copy(dateInMillis = event.date) }
+                reduce {
+                    copy(
+                        dateInMillis = event.date,
+                        date = dateFormat.format(event.date),
+                    )
+                }
             }
             is ExpenseEvent.UpdateActivity -> container.intent {
                 reduce { copy(activity = event.activity) }
