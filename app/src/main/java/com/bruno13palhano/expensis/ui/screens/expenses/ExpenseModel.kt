@@ -27,6 +27,7 @@ sealed interface ExpenseEvent {
     data class UpdateDate(val date: Long) : ExpenseEvent
     data class UpdateActivity(val activity: String?) : ExpenseEvent
     data object ToggleDatePickerVisibility : ExpenseEvent
+    data object DismissKeyboard : ExpenseEvent
     data object NavigateBack : ExpenseEvent
 }
 

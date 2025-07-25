@@ -43,6 +43,7 @@ import com.bruno13palhano.expensis.ui.components.CustomClickField
 import com.bruno13palhano.expensis.ui.components.CustomDatePicker
 import com.bruno13palhano.expensis.ui.components.CustomDoubleField
 import com.bruno13palhano.expensis.ui.components.CustomTextField
+import com.bruno13palhano.expensis.ui.shared.clickableWithoutRipple
 import com.bruno13palhano.expensis.ui.shared.currentDate
 import com.bruno13palhano.expensis.ui.shared.getErrorMessage
 import com.bruno13palhano.expensis.ui.shared.rememberFlowWithLifecycle
@@ -108,7 +109,9 @@ private fun ExpenseContent(
     onEvent: (event: ExpenseEvent) -> Unit,
 ) {
     Scaffold(
-        modifier = Modifier.consumeWindowInsets(WindowInsets.safeDrawing),
+        modifier = Modifier
+            .consumeWindowInsets(WindowInsets.safeDrawing)
+            .clickableWithoutRipple { onEvent(ExpenseEvent.DismissKeyboard) },
         topBar = {
             TopAppBar(
                 title = { Text(text = stringResource(id = R.string.expense)) },

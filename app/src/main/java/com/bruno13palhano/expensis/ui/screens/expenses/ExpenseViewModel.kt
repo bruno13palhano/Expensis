@@ -45,6 +45,9 @@ class ExpenseViewModel @Inject constructor(
             ExpenseEvent.ToggleDatePickerVisibility -> container.intent {
                 reduce { copy(isDatePickerVisible = !isDatePickerVisible) }
             }
+            ExpenseEvent.DismissKeyboard -> container.intent {
+                postSideEffect(effect = ExpenseSideEffect.DismissKeyboard)
+            }
             ExpenseEvent.NavigateBack -> container.intent {
                 postSideEffect(effect = ExpenseSideEffect.NavigateBack)
             }
