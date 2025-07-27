@@ -24,7 +24,7 @@ sealed interface ExpenseEvent {
     data class UpdateDescription(val description: String) : ExpenseEvent
     data class UpdateAmount(val amount: String) : ExpenseEvent
     data object ToggleIsIncome : ExpenseEvent
-    data class UpdateDate(val date: Long) : ExpenseEvent
+    data class UpdateDate(val dateInMillis: Long, val date: String) : ExpenseEvent
     data class UpdateActivity(val activity: String?) : ExpenseEvent
     data object ToggleDatePickerVisibility : ExpenseEvent
     data object DismissKeyboard : ExpenseEvent
