@@ -12,4 +12,4 @@ val dateFormat: DateFormat = SimpleDateFormat.getDateInstance().apply {
 
 fun currentDate() = LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli()
 
-fun currentTimestamp(): String = dateFormat.format(currentDate())
+fun currantDateFormatted(): String = dateFormat.format(currentDate())
