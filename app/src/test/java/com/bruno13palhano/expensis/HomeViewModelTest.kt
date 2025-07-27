@@ -2,15 +2,18 @@ package com.bruno13palhano.expensis
 
 import app.cash.turbine.test
 import com.bruno13palhano.core.data.repository.ExpenseRepository
+import com.bruno13palhano.core.model.Expense
 import com.bruno13palhano.expensis.ui.screens.home.HomeCommand
 import com.bruno13palhano.expensis.ui.screens.home.HomeEvent
 import com.bruno13palhano.expensis.ui.screens.home.HomeSideEffect
 import com.bruno13palhano.expensis.ui.screens.home.HomeViewModel
 import com.google.common.truth.Truth.assertThat
 import io.mockk.MockKAnnotations
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -44,6 +47,31 @@ class HomeViewModelTest {
         assertThat(state.profit).isEqualTo(0.0)
         assertThat(state.isProfitVisible).isFalse()
         assertThat(state.isCommandsInfoVisible).isFalse()
+    }
+
+    @Test
+    fun `UpdateProfit should update state correctly`() = runTest {
+        every { expenseRepository.getAll() } returns flow {
+            emit(
+                listOf(
+                    Expense(
+                        id = 0L,
+                        description = "",
+                        amount = 100.0,
+                        isIncome = true,
+                        date = 0L,
+                        activity = null,
+                    ),
+                ),
+            )
+        }
+
+        viewModel.container.state.test {
+            skipItems(1)
+            viewModel.onEvent(event = HomeEvent.UpdateProfit)
+            assertThat(awaitItem().profit).isEqualTo(100.0)
+            cancelAndIgnoreRemainingEvents()
+        }
     }
 
     @Test
