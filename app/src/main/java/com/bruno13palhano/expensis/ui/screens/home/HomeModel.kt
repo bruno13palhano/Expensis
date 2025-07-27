@@ -12,6 +12,7 @@ data class HomeState(
 
 @Immutable
 sealed interface HomeEvent {
+    data object UpdateProfit : HomeEvent
     data object NavigateToNewExpense : HomeEvent
     data object NavigateToExpenses : HomeEvent
     data object NavigateToAnalytics : HomeEvent

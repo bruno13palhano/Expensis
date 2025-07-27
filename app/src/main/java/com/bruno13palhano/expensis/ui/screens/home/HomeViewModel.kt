@@ -18,6 +18,23 @@ class HomeViewModel @Inject constructor(
 
     fun onEvent(event: HomeEvent) {
         when (event) {
+            HomeEvent.UpdateProfit -> container.intent {
+                expenseRepository.getAll().collect { expenses ->
+                    var totalAmount = 0.0
+                    var totalDebit = 0.0
+
+                    expenses.forEach { expense ->
+                        if (expense.isIncome) {
+                            totalAmount += expense.amount
+                        } else {
+                            totalDebit += expense.amount
+                        }
+                    }
+
+                    val profit = totalAmount - totalDebit
+                    reduce { copy(profit = profit) }
+                }
+            }
             HomeEvent.NavigateToAnalytics -> container.intent {
                 postSideEffect(effect = HomeSideEffect.NavigateToAnalytics)
             }
